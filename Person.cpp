@@ -2,7 +2,6 @@
 
 Person::Person(string n, int by)
     : name(n), birthYear(by), motherName(""), fatherName("") {
-    // Başlangıçta anne-baba adı boş, çocuklar boş vektör.
 }
 
 string Person::getName() const {
@@ -34,7 +33,6 @@ void Person::setFatherName(const string& fName) {
 }
 
 void Person::addChildName(const string& childName) {
-    // Aynı çocuk iki kez eklenmesin diye kontrol edebilirsin (isteğe bağlı).
     for (const string& child : childrenNames) {
         if (child == childName) return;
     }
