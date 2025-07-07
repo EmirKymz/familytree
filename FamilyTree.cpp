@@ -3,7 +3,6 @@
 #include <iostream>
 
 FamilyTree::FamilyTree() {
-    // Başlangıçta people vektörü boş
 }
 
 int FamilyTree::findPersonIndex(const string& name) const {
@@ -22,7 +21,6 @@ bool FamilyTree::loadFromFile(const string& peopleFile, const string& relationsh
         return false;
     }
 
-    // people.txt dosyasından kişileri oku
     string name;
     int birthYear;
     while (pfile >> name >> birthYear) {
@@ -30,10 +28,8 @@ bool FamilyTree::loadFromFile(const string& peopleFile, const string& relationsh
     }
     pfile.close();
 
-    // relationships.txt dosyasından ilişkileri oku
     string father, mother, child;
     while (rfile >> father >> mother >> child) {
-        // Eğer çocuk ismi "null" ise ekleme (yani ilişki tamamlanmamış)
         if (child != "null") {
             setParentChild(mother, child, true);
             setParentChild(father, child, false);
@@ -47,7 +43,6 @@ void FamilyTree::addPerson(string name, int birthYear) {
     if (findPersonIndex(name) == -1) {
         people.push_back(Person(name, birthYear));
     }
-    // Zaten varsa hiçbir şey yapma (veya istenirse hata mesajı menüde gösterilir)
 }
 
 bool FamilyTree::setParentChild(string parentName, string childName, bool isMother) {
@@ -114,7 +109,6 @@ vector<string> FamilyTree::findAncestors(const string& name, int generations) co
     if (idx == -1 || generations <= 0) return result;
 
     const Person& p = people[idx];
-    // 1. jenerasyon: Anne ve baba
     string mother = p.getMotherName();
     string father = p.getFatherName();
 
@@ -125,19 +119,15 @@ vector<string> FamilyTree::findAncestors(const string& name, int generations) co
         result.push_back("Generation 1: " + father);
     }
 
-    // Alt jenerasyonlar için rekürsif ara
     if (generations > 1) {
-        // Anne tarafı
         if (mother != "") {
             vector<string> m_anc = findAncestors(mother, generations - 1);
             for (const string& anc : m_anc) {
-                // "Generation X: ..." -> X'i bir arttır
                 int genNum = stoi(anc.substr(11, anc.find(':') - 11));
                 string newAnc = "Generation " + to_string(genNum + 1) + anc.substr(anc.find(':'));
                 result.push_back(newAnc);
             }
         }
-        // Baba tarafı
         if (father != "") {
             vector<string> f_anc = findAncestors(father, generations - 1);
             for (const string& anc : f_anc) {
@@ -158,7 +148,6 @@ vector<string> FamilyTree::findDescendants(const string& name, int generations) 
     const Person& p = people[idx];
     const vector<string>& children = p.getChildrenNames();
 
-    // 1. jenerasyon çocuklar
     if (!children.empty()) {
         string genStr = "Generation 1: ";
         for (size_t i = 0; i < children.size(); ++i) {
@@ -167,7 +156,6 @@ vector<string> FamilyTree::findDescendants(const string& name, int generations) 
         }
         result.push_back(genStr);
 
-        // Alt jenerasyonlar
         if (generations > 1) {
             for (const string& child : children) {
                 vector<string> childDesc = findDescendants(child, generations - 1);
