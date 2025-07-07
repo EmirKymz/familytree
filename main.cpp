@@ -120,7 +120,6 @@ int main() {
             cout << "Goodbye!" << endl;
             break;
         }
-        // Geçersiz seçimde menüyü tekrar göster.
     }
 
     return 0;
